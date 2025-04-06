@@ -1,9 +1,19 @@
 import React, {useMemo} from 'react';
-import {FlatList, ListRenderItemInfo, StyleSheet} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItemInfo,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Movie, TabCategory} from '../../../functional/type/types';
 import MovieCard from './MovieCard';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import apiClient from '../../../functional/apis/api-client';
+import {PRIMARY_BLUE} from '../../utils/color';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface MovieListProps {
   category: TabCategory;
@@ -11,7 +21,7 @@ interface MovieListProps {
 }
 
 const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
-  const {data, fetchNextPage} = useInfiniteQuery({
+  const {data, fetchNextPage, isLoading} = useInfiniteQuery({
     queryKey: ['movies', searchQuery, category],
     queryFn: ({pageParam}) => {
       return apiClient.getMovies(category, pageParam, searchQuery);
@@ -39,6 +49,14 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
     return <MovieCard key={index} movie={item} />;
   };
 
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <FlatList
       style={styles.listContainer}
@@ -47,6 +65,12 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
       numColumns={2}
       onEndReachedThreshold={0.3}
       onEndReached={() => fetchNextPage()}
+      ListEmptyComponent={() => (
+        <View style={styles.emptyListComponent}>
+          <Icon color={PRIMARY_BLUE} name="ban" size={24} />
+          <Text style={styles.notFoundText}>{'No Movies Found'}</Text>
+        </View>
+      )}
     />
   );
 };
@@ -54,6 +78,22 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
 const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
+    margin: 5,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyListComponent: {
+    alignSelf: 'center',
+    marginTop: 32,
+    flexDirection: 'row',
+  },
+  notFoundText: {
+    fontSize: 18,
+    color: PRIMARY_BLUE,
+    marginLeft: 12,
   },
 });
 

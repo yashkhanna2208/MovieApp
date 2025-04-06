@@ -41,7 +41,7 @@ export default MovieCard;
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flex: 1,
+    flex: 1 / 2,
     borderRadius: 8,
     borderStyle: 'solid',
     borderColor: 'gray',

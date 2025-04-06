@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import {PRIMARY_BLUE} from '../utils/color';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackType} from '../navigation/RootNavigation';
 
 interface AppToolbarProps {
   searchQuery: string;
@@ -15,6 +17,7 @@ interface AppToolbarProps {
 }
 
 export const AppToolbar: React.FC<AppToolbarProps> = props => {
+  const navigation = useNavigation<NavigationProp<RootStackType, 'Home'>>();
   const {searchQuery, setSearchQuery} = props;
   const [isSearchEnabled, setIsSearchEnabled] = useState(false);
 
@@ -56,7 +59,7 @@ export const AppToolbar: React.FC<AppToolbarProps> = props => {
             style={styles.searchIcon}>
             <Icon name="magnifying-glass" color={PRIMARY_BLUE} size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Favourites')}>
             <Icon name="heart" color={PRIMARY_BLUE} size={24} />
           </TouchableOpacity>
         </View>

@@ -4,7 +4,7 @@ import RootNavigation, {
 } from './src/client/navigation/RootNavigation';
 
 const App = () => {
-  return <RootNavigation initialRoute={RootStackName.Home} />;
+  return <RootNavigation initialRoute={RootStackName.HOME} />;
 };
 
 export default App;

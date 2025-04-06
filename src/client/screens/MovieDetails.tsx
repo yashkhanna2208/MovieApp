@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
+  ActivityIndicator,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -80,7 +81,11 @@ const MovieDetails: React.FC = () => {
   }, [data, isFavorite, toggleFavourite]);
 
   if (isLoading || !data) {
-    return <></>;
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#00ff00" />
+      </SafeAreaView>
+    );
   }
 
   const rating = data.vote_average.toFixed(1);
@@ -147,7 +152,7 @@ const styles = StyleSheet.create({
   poster: {
     height: 160,
     aspectRatio: 3 / 4,
-    marginHorizontal: 24,
+    marginLeft: 24,
     borderRadius: 8,
     resizeMode: 'cover',
   },
@@ -155,10 +160,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 8,
   },
   title: {
     fontSize: 20,
     fontWeight: '600',
+    overflow: 'hidden',
   },
   detailsContainer: {
     marginVertical: 16,
@@ -201,6 +209,11 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     alignSelf: 'center',
     marginLeft: 8,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
