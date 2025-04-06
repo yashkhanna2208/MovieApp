@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +12,12 @@ import apiClient from '../../functional/apis/api-client';
 import type {RouteProp} from '@react-navigation/core/src/types';
 import MovieImage from '../components/common/MovieImage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {BASE_COLOR, PRIMARY_BLUE} from '../utils/color';
+import AwesomeIcon from 'react-native-vector-icons/FontAwesome6';
+
+import {BASE_COLOR, PRIMARY_BLUE, WHITE} from '../utils/color';
 import {Movie} from '../../functional/type/types';
 import {getFormattedDate} from '../../functional/utils';
+import StorageHelper from '../../functional/storage/StorageHelper';
 
 interface RouteData extends RouteProp<ParamListBase> {
   params: {
@@ -22,8 +25,12 @@ interface RouteData extends RouteProp<ParamListBase> {
   };
 }
 
+const storageHelper = new StorageHelper();
+
 const MovieDetails: React.FC = () => {
   const navigation = useNavigation();
+
+  const [isFavorite, setIsFavorite] = useState(false);
   const {params} = useRoute<RouteData>();
   const id = params?.id;
 
@@ -34,6 +41,44 @@ const MovieDetails: React.FC = () => {
     },
   });
 
+  useEffect(() => {
+    storageHelper.getIsFavourite(id).then(setIsFavorite);
+  }, [id]);
+
+  const toggleFavourite = useCallback(() => {
+    if (!data) {
+      return;
+    }
+
+    storageHelper.toggleFavourite(data).then(setIsFavorite);
+  }, [data, setIsFavorite]);
+
+  const FavouriteButton = useMemo(() => {
+    if (!data) {
+      return <></>;
+    }
+
+    if (isFavorite) {
+      return (
+        <TouchableOpacity
+          onPress={toggleFavourite}
+          style={styles.favouriteButton}>
+          <Icon name={'heart'} color={PRIMARY_BLUE} size={24} />
+          <Text style={styles.buttonText}>{'Added to Favourite'}</Text>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={toggleFavourite}
+        style={styles.favouriteButton}>
+        <AwesomeIcon color={PRIMARY_BLUE} name={'heart'} size={24} />
+        <Text style={styles.buttonText}>{'Add to Favourite'}</Text>
+      </TouchableOpacity>
+    );
+  }, [data, isFavorite, toggleFavourite]);
+
   if (isLoading || !data) {
     return <></>;
   }
@@ -43,38 +88,46 @@ const MovieDetails: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <MovieImage style={styles.backdrop} url={data.backdrop_path} />
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={styles.backButton}>
-        <Icon key="back" name="angle-left" size={32} color={BASE_COLOR} />
-      </TouchableOpacity>
-      <View style={styles.header}>
-        <MovieImage style={styles.poster} url={data.poster_path} />
-        <View style={styles.titleContainer}>
-          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
-            {data.title}
-          </Text>
-          <Text style={styles.value}>
-            {getFormattedDate(data.release_date)}
-          </Text>
+      <View style={styles.topContainer}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}>
+          <Icon key="back" name="angle-left" size={32} color={BASE_COLOR} />
+        </TouchableOpacity>
+        <View style={styles.header}>
+          <MovieImage style={styles.poster} url={data.poster_path} />
+          <View style={styles.titleContainer}>
+            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+              {data.title}
+            </Text>
+            <Text style={styles.value}>
+              {getFormattedDate(data.release_date)}
+            </Text>
+          </View>
+        </View>
+        <View />
+        <View style={styles.detailsContainer}>
+          <View style={styles.userRatingContainer}>
+            <Text style={styles.label}>{'User Rating : '}</Text>
+            <Text style={styles.rating}>{`${rating}/ 10`}</Text>
+            <Icon name="star" size={24} color={PRIMARY_BLUE} />
+          </View>
+          <Text style={styles.label}>{'Overview'}</Text>
+          <Text style={styles.value}>{data.overview}</Text>
         </View>
       </View>
-      <View />
-      <View style={styles.detailsContainer}>
-        <View style={styles.userRatingContainer}>
-          <Text style={styles.label}>{'User Rating : '}</Text>
-          <Text style={styles.rating}>{`${rating}/ 10`}</Text>
-          <Icon name="star" size={24} color={PRIMARY_BLUE} />
-        </View>
-        <Text style={styles.label}>{'Overview'}</Text>
-        <Text style={styles.value}>{data.overview}</Text>
-      </View>
+      {FavouriteButton}
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: WHITE,
+    justifyContent: 'space-between',
+  },
+  topContainer: {
     flex: 1,
   },
   backdrop: {
@@ -129,6 +182,25 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginRight: 8,
     alignSelf: 'center',
+  },
+  favouriteButton: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    borderColor: PRIMARY_BLUE,
+    borderRadius: 8,
+    borderWidth: 2,
+    justifyContent: 'center',
+    backgroundColor: WHITE,
+    color: PRIMARY_BLUE,
+    padding: 12,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    color: PRIMARY_BLUE,
+    fontWeight: '500',
+    alignSelf: 'center',
+    marginLeft: 8,
   },
 });
 
