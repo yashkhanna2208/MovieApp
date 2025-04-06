@@ -6,20 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {MovieCategory} from '../../../functional/type/types';
+import {TabCategory} from '../../../functional/type/types';
 import {TAB_CATEGORIES} from '../../utils/constants';
 import {PRIMARY_BLUE, WHITE} from '../../utils/color';
 
 interface MovieCategoryTabProps {
-  setSelectedTab: React.Dispatch<MovieCategory>;
-  selectedTab: MovieCategory;
+  setSelectedTab: React.Dispatch<TabCategory>;
+  selectedTab: TabCategory;
 }
 
 const MovieCategoryTab: React.FC<MovieCategoryTabProps> = props => {
   const {selectedTab, setSelectedTab} = props;
 
   const getTabStyles = useCallback(
-    (category: MovieCategory) => {
+    (category: TabCategory) => {
       const selected = selectedTab === category;
 
       if (selected) {
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   container: {
     height: 35,
     marginBottom: 16,
+    marginRight: 16,
   },
   tab: {
     alignItems: 'center',

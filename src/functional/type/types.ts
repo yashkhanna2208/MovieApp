@@ -17,7 +17,7 @@ export type Movie = {
 
 export interface Category {
   label: string;
-  value: MovieCategory;
+  value: TabCategory;
 }
 
 export type DateRange = {
@@ -25,7 +25,7 @@ export type DateRange = {
   minimum: string;
 };
 
-export enum MovieCategory {
+export enum TabCategory {
   POPULAR = 'popular',
   NOW_PLAYING = 'now_playing',
   TOP_RATED = 'top_rated',

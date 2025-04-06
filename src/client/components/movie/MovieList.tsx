@@ -1,19 +1,20 @@
 import React, {useMemo} from 'react';
 import {FlatList, ListRenderItemInfo, StyleSheet} from 'react-native';
-import {Movie, MovieCategory} from '../../../functional/type/types';
+import {Movie, TabCategory} from '../../../functional/type/types';
 import MovieCard from './MovieCard';
 import {useInfiniteQuery} from '@tanstack/react-query';
 import apiClient from '../../../functional/apis/api-client';
 
 interface MovieListProps {
-  category: MovieCategory;
+  category: TabCategory;
+  searchQuery: string;
 }
 
-const MovieList: React.FC<MovieListProps> = ({category}) => {
+const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
   const {data, fetchNextPage} = useInfiniteQuery({
-    queryKey: ['movie', category],
+    queryKey: ['movies', searchQuery, category],
     queryFn: ({pageParam}) => {
-      return apiClient.getMovies(category, pageParam);
+      return apiClient.getMovies(category, pageParam, searchQuery);
     },
     initialPageParam: 1,
     getPreviousPageParam: prevPage => {

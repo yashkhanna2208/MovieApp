@@ -4,17 +4,27 @@ import {Movie} from '../../../functional/type/types';
 import MovieImage from '../common/MovieImage';
 import {getFormattedDate} from '../../../functional/utils';
 import {PRIMARY_BLUE} from '../../utils/color';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {RootStackName, RootStackType} from '../../navigation/RootNavigation';
 
 interface MovieCardProps {
   movie: Movie;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
+  const navigation = useNavigation<NavigationProp<RootStackType, 'Home'>>();
+
   const releaseDate = getFormattedDate(movie.release_date);
   const rating = movie.vote_average.toFixed(1);
 
+  const onPressMovie = () => {
+    navigation.navigate(RootStackName.MOVIE_DETAILS, {
+      id: movie.id,
+    });
+  };
+
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <TouchableOpacity onPress={onPressMovie} style={styles.cardContainer}>
       <MovieImage style={styles.poster} url={movie.poster_path} />
       <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
         {movie.title}
