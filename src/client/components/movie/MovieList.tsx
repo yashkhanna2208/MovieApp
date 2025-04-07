@@ -14,6 +14,7 @@ import {useInfiniteQuery} from '@tanstack/react-query';
 import apiClient from '../../../functional/apis/api-client';
 import {PRIMARY_BLUE} from '../../utils/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Toast from 'react-native-toast-message';
 
 interface MovieListProps {
   category: TabCategory;
@@ -21,7 +22,7 @@ interface MovieListProps {
 }
 
 const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
-  const {data, fetchNextPage, isLoading, error, status} = useInfiniteQuery({
+  const {data, fetchNextPage, isLoading, error} = useInfiniteQuery({
     queryKey: ['movies', searchQuery, category],
     queryFn: ({pageParam}) => {
       return apiClient.getMovies(category, pageParam, searchQuery);
@@ -38,8 +39,13 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
   });
 
   useEffect(() => {
-    console.log(error, status);
-  }, [error, status]);
+    if (error) {
+      Toast.show({
+        type: 'error',
+        text1: error.message,
+      });
+    }
+  }, [error]);
 
   const movies = useMemo(() => {
     if (!data) {

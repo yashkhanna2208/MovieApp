@@ -12,7 +12,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
   config => {
     const token = Config.TOKEN;
-    config.headers.Authorization = 'Bearer';
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   error => Promise.reject(error),

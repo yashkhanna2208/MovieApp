@@ -1,4 +1,9 @@
 module.exports = {
   presets: ['module:metro-react-native-babel-preset'],
-  plugins: [],
+  overrides: [
+    {
+      test: './node_modules/@tanstack',
+      plugins: [['@babel/plugin-transform-private-methods', {loose: true}]],
+    },
+  ],
 };

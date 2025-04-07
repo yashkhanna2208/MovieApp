@@ -1,5 +1,6 @@
 import apiClient from '../../src/functional/apis/api-client';
 import {Movie} from '../../src/functional/type/types';
+import axiosClient from '../../src/functional/apis/axios-client';
 
 export const mockedGetMovieResponse = {
   dates: {
@@ -47,6 +48,12 @@ export const mockedGetMovieResponse = {
   total_results: 4990,
 };
 
+export const mockGetAxiosResponse = (results: Movie[] = []) => {
+  return jest.spyOn(axiosClient, 'get').mockResolvedValue({
+    data: {...mockedGetMovieResponse, results},
+  });
+};
+
 export const mockGetMovieResponse = (results: Movie[] = []) => {
   return jest
     .spyOn(apiClient, 'getMovies')
@@ -54,7 +61,7 @@ export const mockGetMovieResponse = (results: Movie[] = []) => {
 };
 
 export const mockGetMovieIdResponse = () => {
-  return jest
-    .spyOn(apiClient, 'getMovieById')
-    .mockResolvedValue({...mockedGetMovieResponse.results[0]});
+  return jest.spyOn(axiosClient, 'get').mockResolvedValue({
+    data: {...mockedGetMovieResponse.results[0]},
+  });
 };

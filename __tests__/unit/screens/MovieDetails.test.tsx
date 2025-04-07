@@ -34,7 +34,7 @@ describe('Movie Details Screen', () => {
     render(DetailsPage);
 
     expect(getRequest).toHaveBeenCalledWith(
-      mockedGetMovieResponse.results[0].id,
+      `movie/${mockedGetMovieResponse.results[0].id}`,
     );
   });
 
