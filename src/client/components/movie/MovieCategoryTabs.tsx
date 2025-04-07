@@ -15,7 +15,7 @@ interface MovieCategoryTabProps {
   selectedTab: TabCategory;
 }
 
-const MovieCategoryTab: React.FC<MovieCategoryTabProps> = props => {
+const MovieCategoryTabs: React.FC<MovieCategoryTabProps> = props => {
   const {selectedTab, setSelectedTab} = props;
 
   const getTabStyles = useCallback(
@@ -39,6 +39,7 @@ const MovieCategoryTab: React.FC<MovieCategoryTabProps> = props => {
 
           return (
             <TouchableOpacity
+              testID={`tab-${category.value}`}
               key={category.value}
               onPress={() => setSelectedTab(category.value)}
               style={[styles.tab, tabStyle.tab]}>
@@ -51,7 +52,7 @@ const MovieCategoryTab: React.FC<MovieCategoryTabProps> = props => {
   );
 };
 
-export default MovieCategoryTab;
+export default MovieCategoryTabs;
 
 const styles = StyleSheet.create({
   container: {

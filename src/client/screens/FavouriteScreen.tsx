@@ -26,7 +26,7 @@ const FavouriteScreen: React.FC = () => {
   }, [isFocus]);
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView testID="favourite-page" style={styles.container}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon key="back" name="angle-left" size={32} color={PRIMARY_BLUE} />
@@ -41,11 +41,13 @@ const FavouriteScreen: React.FC = () => {
         style={styles.listContainer}
         numColumns={2}
         data={favourites}
-        renderItem={({item}) => <MovieCard movie={item} />}
+        renderItem={({item, index}) => <MovieCard index={index} movie={item} />}
         ListEmptyComponent={() => (
           <View style={styles.emptyListComponent}>
             <Icon color={PRIMARY_BLUE} name="ban" size={24} />
-            <Text style={styles.notFoundText}>{'No Favourites Added'}</Text>
+            <Text testID="no-fav-add-text" style={styles.notFoundText}>
+              {'No Favourites Added'}
+            </Text>
           </View>
         )}
       />
@@ -54,6 +56,9 @@ const FavouriteScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   headerContainer: {
     alignItems: 'center',
     flexDirection: 'row',

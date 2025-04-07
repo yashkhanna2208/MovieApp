@@ -8,11 +8,11 @@ const axiosClient = axios.create({
   },
 });
 
-// Added token without condition in the header because we are directly picking it from env
+// Added token without condition in the header because we are directly picking unit from env
 axiosClient.interceptors.request.use(
   config => {
     const token = Config.TOKEN;
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = 'Bearer';
     return config;
   },
   error => Promise.reject(error),

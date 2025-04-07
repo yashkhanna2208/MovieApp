@@ -29,12 +29,14 @@ export const AppToolbar: React.FC<AppToolbarProps> = props => {
     return (
       <View style={styles.searchContainer}>
         <TextInput
+          testID="search-input"
           onChangeText={setSearchQuery}
           value={searchQuery}
           autoFocus={true}
           style={styles.searchInput}
         />
         <TouchableOpacity
+          testID="clear-search-button"
           onPress={() => {
             setSearchQuery('');
             setIsSearchEnabled(false);
@@ -51,15 +53,20 @@ export const AppToolbar: React.FC<AppToolbarProps> = props => {
       <View style={styles.toolbarContainer}>
         <View style={styles.rowContainer}>
           <Icon name="film" color={PRIMARY_BLUE} size={24} />
-          <Text style={styles.title}>{'Movies'}</Text>
+          <Text testID="header-title" style={styles.title}>
+            {'Movies'}
+          </Text>
         </View>
         <View style={styles.rowContainer}>
           <TouchableOpacity
+            testID="search-button"
             onPress={() => setIsSearchEnabled(true)}
             style={styles.searchIcon}>
             <Icon name="magnifying-glass" color={PRIMARY_BLUE} size={24} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Favourites')}>
+          <TouchableOpacity
+            testID="favourite-button"
+            onPress={() => navigation.navigate('Favourites')}>
             <Icon name="heart" color={PRIMARY_BLUE} size={24} />
           </TouchableOpacity>
         </View>

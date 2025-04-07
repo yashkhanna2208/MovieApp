@@ -8,10 +8,11 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackName, RootStackType} from '../../navigation/RootNavigation';
 
 interface MovieCardProps {
+  index: number;
   movie: Movie;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
+const MovieCard: React.FC<MovieCardProps> = ({movie, index}) => {
   const navigation = useNavigation<NavigationProp<RootStackType, 'Home'>>();
 
   const releaseDate = getFormattedDate(movie.release_date);
@@ -24,14 +25,29 @@ const MovieCard: React.FC<MovieCardProps> = ({movie}) => {
   };
 
   return (
-    <TouchableOpacity onPress={onPressMovie} style={styles.cardContainer}>
-      <MovieImage style={styles.poster} url={movie.poster_path} />
-      <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+    <TouchableOpacity
+      testID={`movie-card-${index}`}
+      onPress={onPressMovie}
+      style={styles.cardContainer}>
+      <MovieImage
+        testID={`movie-image-${index}`}
+        style={styles.poster}
+        url={movie.poster_path}
+      />
+      <Text
+        testID={`movie-title-${index}`}
+        style={styles.title}
+        numberOfLines={2}
+        ellipsizeMode="tail">
         {movie.title}
       </Text>
-      <Text style={styles.date}>{releaseDate}</Text>
+      <Text testID={`movie-release-date-${index}`} style={styles.date}>
+        {releaseDate}
+      </Text>
       <View style={styles.ratingContainer}>
-        <Text style={styles.rating}>{rating}</Text>
+        <Text testID={`movie-rating-${index}`} style={styles.rating}>
+          {rating}
+        </Text>
       </View>
     </TouchableOpacity>
   );

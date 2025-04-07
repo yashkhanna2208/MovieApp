@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -21,7 +21,7 @@ interface MovieListProps {
 }
 
 const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
-  const {data, fetchNextPage, isLoading} = useInfiniteQuery({
+  const {data, fetchNextPage, isLoading, error, status} = useInfiniteQuery({
     queryKey: ['movies', searchQuery, category],
     queryFn: ({pageParam}) => {
       return apiClient.getMovies(category, pageParam, searchQuery);
@@ -37,6 +37,10 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
     },
   });
 
+  useEffect(() => {
+    console.log(error, status);
+  }, [error, status]);
+
   const movies = useMemo(() => {
     if (!data) {
       return [];
@@ -46,7 +50,7 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
   }, [data]);
 
   const renderItem = ({item, index}: ListRenderItemInfo<Movie>) => {
-    return <MovieCard key={index} movie={item} />;
+    return <MovieCard index={index} key={index} movie={item} />;
   };
 
   if (isLoading) {
@@ -59,6 +63,7 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
 
   return (
     <FlatList
+      testID="movie-list"
       style={styles.listContainer}
       data={movies}
       renderItem={renderItem}
@@ -68,7 +73,9 @@ const MovieList: React.FC<MovieListProps> = ({category, searchQuery}) => {
       ListEmptyComponent={() => (
         <View style={styles.emptyListComponent}>
           <Icon color={PRIMARY_BLUE} name="ban" size={24} />
-          <Text style={styles.notFoundText}>{'No Movies Found'}</Text>
+          <Text testID="empty-movies-list" style={styles.notFoundText}>
+            {'No Movies Found'}
+          </Text>
         </View>
       )}
     />

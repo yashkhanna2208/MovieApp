@@ -62,6 +62,7 @@ const MovieDetails: React.FC = () => {
     if (isFavorite) {
       return (
         <TouchableOpacity
+          testID="remove-favourite-button"
           onPress={toggleFavourite}
           style={styles.favouriteButton}>
           <Icon name={'heart'} color={PRIMARY_BLUE} size={24} />
@@ -72,6 +73,7 @@ const MovieDetails: React.FC = () => {
 
     return (
       <TouchableOpacity
+        testID="add-favourite-button"
         onPress={toggleFavourite}
         style={styles.favouriteButton}>
         <AwesomeIcon color={PRIMARY_BLUE} name={'heart'} size={24} />
@@ -91,21 +93,34 @@ const MovieDetails: React.FC = () => {
   const rating = data.vote_average.toFixed(1);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <MovieImage style={styles.backdrop} url={data.backdrop_path} />
+    <SafeAreaView testID="details-page" style={styles.container}>
+      <MovieImage
+        testID="movie-backdrop"
+        style={styles.backdrop}
+        url={data.backdrop_path}
+      />
       <View style={styles.topContainer}>
         <TouchableOpacity
+          testID="back-button"
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
           <Icon key="back" name="angle-left" size={32} color={BASE_COLOR} />
         </TouchableOpacity>
         <View style={styles.header}>
-          <MovieImage style={styles.poster} url={data.poster_path} />
+          <MovieImage
+            testID="movie-poster"
+            style={styles.poster}
+            url={data.poster_path}
+          />
           <View style={styles.titleContainer}>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+            <Text
+              testID="movie-title"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.title}>
               {data.title}
             </Text>
-            <Text style={styles.value}>
+            <Text testID="movie-release-date" style={styles.value}>
               {getFormattedDate(data.release_date)}
             </Text>
           </View>
@@ -113,12 +128,18 @@ const MovieDetails: React.FC = () => {
         <View />
         <View style={styles.detailsContainer}>
           <View style={styles.userRatingContainer}>
-            <Text style={styles.label}>{'User Rating : '}</Text>
-            <Text style={styles.rating}>{`${rating}/ 10`}</Text>
+            <Text testID="movie-rating-label" style={styles.label}>
+              {'User Rating : '}
+            </Text>
+            <Text
+              testID="movie-rating"
+              style={styles.rating}>{`${rating}/ 10`}</Text>
             <Icon name="star" size={24} color={PRIMARY_BLUE} />
           </View>
           <Text style={styles.label}>{'Overview'}</Text>
-          <Text style={styles.value}>{data.overview}</Text>
+          <Text testID="movie-overview" style={styles.value}>
+            {data.overview}
+          </Text>
         </View>
       </View>
       {FavouriteButton}

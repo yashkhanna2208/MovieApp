@@ -21,8 +21,6 @@ class StorageHelper {
   }
 
   public async toggleFavourite(movie: Movie): Promise<boolean> {
-    console.log(movie);
-
     const favorites = await this.getFavourites();
     const isFavourite = await this.getIsFavourite(movie.id);
 
