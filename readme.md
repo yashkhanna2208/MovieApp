@@ -17,7 +17,6 @@ A rating app for Movies
 - movies with smooth infinite scroll
 - search movies with infinite scroll
 - cached api calling with **@tanstack/react-query**
-- works for both android and ios
 - add to favourites functinality
 - Displayed error with **Toast**
 
@@ -29,6 +28,19 @@ A rating app for Movies
 - need a token to start the project get the token from https://developer.themoviedb.org
 - replace the token placeholder in .env
 
+### For iOS
+
+```bash
+# in ios directory
+pod install
+
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
+```
+
 ### For Android
 
 ```bash
@@ -39,15 +51,6 @@ npm run android
 yarn android
 ```
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
 
 ## screenshots
 
@@ -60,9 +63,11 @@ yarn ios
 
 </table>
 
-
 <table>
   <tr>
+    <td align="center">
+      <img src="screenshots/home.png" alt="Screenshot 1" width="200" />
+    </td>
     <td align="center">
       <img src="screenshots/home.png" alt="Screenshot 1" width="200" />
     </td>
